@@ -30,8 +30,8 @@ export const HelpPage: React.FC = () => {
       a: 'The frontend uploads student scans and rubrics to our secure backend API. Our backend processes OCR, maps student derivations against rubric evidence points, and returns an explainable JSON score breakdown with confidence indicators. No grading logic or prompts execute directly in the browser.',
     },
     {
-      q: 'Is student identity protected during AI grading (FERPA compliance)?',
-      a: 'Yes! Student names and personally identifiable information (PII) are NEVER sent to AI models or backend evaluators. Submissions are anonymized using cryptographically secure UUIDs (e.g. STU-A91F23).',
+      q: 'Is student identity protected during AI grading (DPDP 2023 alignment)?',
+      a: 'Yes! Student names and personally identifiable information (PII) are NEVER sent to AI models or backend evaluators. Submissions are anonymized using cryptographically secure UUIDs (e.g. STU-A91F23) in alignment with India\'s Digital Personal Data Protection (DPDP) Act, 2023.',
     },
     {
       q: 'What happens when AI confidence falls below the institutional threshold?',
@@ -43,7 +43,7 @@ export const HelpPage: React.FC = () => {
     },
     {
       q: 'What is the Featherless.ai Integration Boundary?',
-      a: 'Smart Grade Assistant enforces a strict architectural boundary. The web frontend NEVER communicates directly with Featherless.ai or third-party AI APIs. All requests route through our backend API, preventing API key exposure and ensuring strict FERPA data governance.',
+      a: 'Smart Grade Assistant enforces a strict architectural boundary. The web frontend NEVER communicates directly with Featherless.ai or third-party AI APIs. All requests route through our backend API, preventing API key exposure and ensuring strict DPDP 2023 data governance.',
     },
   ]
 
@@ -71,7 +71,7 @@ export const HelpPage: React.FC = () => {
           <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Documentation, FERPA compliance guidelines, AI evaluation workflows, and institutional support.
+          Documentation, DPDP 2023 alignment guidelines, AI evaluation workflows, and institutional support.
         </p>
       </div>
 
@@ -172,15 +172,14 @@ export const HelpPage: React.FC = () => {
         </div>
       </div>
 
-      {/* SECTION 3: FERPA & Privacy Guarantee Card */}
+      {/* SECTION 3: DPDP 2023 & Privacy Guarantee Card */}
       <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-900/90 to-slate-900 text-white shadow-md space-y-3">
         <div className="flex items-center gap-2 font-bold text-emerald-400 uppercase tracking-wider text-xs">
           <ShieldCheck className="w-5 h-5" />
-          <span>FERPA & SOC-2 Type II Certified Data Protection</span>
+          <span>DPDP 2023 Aligned Data Protection</span>
         </div>
         <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-4xl">
-          Smart Grade Assistant guarantees that student identity remains completely decoupled from AI grading engines.
-          All student scans are processed through our zero-retention anonymization pipeline before rubric evaluation.
+          Student data is handled using a privacy-first approach aligned with the principles of India's Digital Personal Data Protection (DPDP) Act, 2023. Student identities are anonymized using UUIDs before AI evaluation to protect personal information.
         </p>
       </div>
 

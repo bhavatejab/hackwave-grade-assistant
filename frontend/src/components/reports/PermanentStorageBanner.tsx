@@ -26,7 +26,7 @@ export const PermanentStorageBanner: React.FC<PermanentStorageBannerProps> = ({ 
       </div>
       <div className="flex items-center gap-2 self-end sm:self-center">
         <span className="px-2.5 py-1 rounded-lg bg-blue-100/70 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 text-[11px] font-semibold border border-blue-200 dark:border-blue-800 shrink-0">
-          FERPA Audit Compliant
+          DPDP 2023 Aligned
         </span>
       </div>
     </div>

@@ -36,11 +36,11 @@ export const PrivacyBadge: React.FC<PrivacyBadgeProps> = ({
         <Lock className="w-4 h-4" />
       </div>
       <div className="flex-1 text-xs sm:text-sm font-medium tracking-tight">
-        <span>AI evaluates anonymous student submissions using UUID.</span>
+        <span>Student data is handled using a privacy-first approach aligned with the principles of India's Digital Personal Data Protection (DPDP) Act, 2023. Student identities are anonymized using UUIDs before AI evaluation to protect personal information.</span>
       </div>
       <div className="hidden sm:flex items-center gap-1 text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-        <span>FERPA Compliant</span>
+        <span>DPDP 2023 Aligned</span>
       </div>
     </div>
   )

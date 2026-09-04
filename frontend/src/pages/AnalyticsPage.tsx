@@ -74,7 +74,7 @@ export const AnalyticsPage: React.FC = () => {
       {/* Permanent Storage UX Banner */}
       <PermanentStorageBanner />
 
-      {/* Privacy FERPA Badge */}
+      {/* Privacy DPDP 2023 Badge */}
       <PrivacyBadge variant="banner" />
 
       {/* Executive Summary Stat Cards required by prompt (6 cards) */}

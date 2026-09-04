@@ -79,14 +79,14 @@ export const SettingsPage: React.FC = () => {
           Institutional & Evaluator Settings
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Manage evaluator credentials, confidence thresholds, notification preferences, and FERPA privacy compliance rules.
+          Manage evaluator credentials, confidence thresholds, notification preferences, and DPDP 2023 privacy alignment rules.
         </p>
       </div>
 
       {/* Permanent Storage UX Banner */}
       <PermanentStorageBanner />
 
-      {/* Privacy FERPA Badge */}
+      {/* Privacy DPDP 2023 Badge */}
       <PrivacyBadge variant="banner" />
 
       <form onSubmit={handleSave} className="space-y-6">
@@ -318,7 +318,7 @@ export const SettingsPage: React.FC = () => {
             {[
               { key: 'emailNotifications', label: 'Email Notifications', desc: 'Receive email summaries when evaluations finish processing.' },
               { key: 'flaggedPaperAlerts', label: 'Flagged Paper Alerts', desc: 'Get notified immediately when papers require manual review.' },
-              { key: 'systemAnnouncements', label: 'System Announcements', desc: 'Updates on AI model enhancements and FERPA compliance standards.' },
+              { key: 'systemAnnouncements', label: 'System Announcements', desc: 'Updates on AI model enhancements and DPDP 2023 alignment standards.' },
             ].map((item) => (
               <div key={item.key} className="flex items-center justify-between py-1">
                 <div>

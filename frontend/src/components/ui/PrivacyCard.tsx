@@ -9,7 +9,7 @@ export interface PrivacyCardProps {
 
 export const PrivacyCard: React.FC<PrivacyCardProps> = ({
   className,
-  text = 'Student identities remain hidden from AI. Only anonymous UUIDs are processed.',
+  text = "Student data is handled using a privacy-first approach aligned with the principles of India's Digital Personal Data Protection (DPDP) Act, 2023. Student identities are anonymized using UUIDs before AI evaluation to protect personal information.",
 }) => {
   return (
     <div
@@ -28,7 +28,7 @@ export const PrivacyCard: React.FC<PrivacyCardProps> = ({
           </span>
           <span className="inline-flex items-center gap-1 text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full border border-slate-700">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
-            FERPA Compliant
+            DPDP 2023 Aligned
           </span>
         </div>
         <p className="text-xs sm:text-sm font-medium text-slate-200 leading-relaxed">

@@ -64,7 +64,7 @@ export const DashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* FERPA Anonymous Privacy Badge Component Requirement */}
+      {/* DPDP 2023 Anonymous Privacy Badge Component Requirement */}
       <PrivacyBadge variant="banner" />
 
       {/* Key Metric Statistics Cards (6 required metrics) */}

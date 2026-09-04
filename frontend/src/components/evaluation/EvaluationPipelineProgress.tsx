@@ -93,7 +93,7 @@ export const EvaluationPipelineProgress: React.FC<EvaluationPipelineProgressProp
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
               <span>Student UUID Anonymization Stream Active</span>
             </div>
-            <span className="font-mono text-emerald-500 font-bold">FERPA OK</span>
+            <span className="font-mono text-emerald-500 font-bold">DPDP 2023 OK</span>
           </div>
         </div>
       </div>

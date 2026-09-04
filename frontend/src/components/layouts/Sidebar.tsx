@@ -154,7 +154,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
       </div>
 
-      {/* FERPA Anonymizer Banner */}
+      {/* DPDP 2023 Anonymizer Banner */}
       {!isCollapsed && (
         <div className="mx-3 my-3 p-3 rounded-xl bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-[#334155] flex items-center gap-2 text-[11px] text-slate-600 dark:text-[#CBD5E1] shrink-0">
           <Lock className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />

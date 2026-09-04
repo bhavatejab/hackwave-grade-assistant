@@ -83,7 +83,7 @@ export const UploadWorkflowPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
           <p className="text-xs sm:text-sm font-semibold">
-            All 3 upload components staged & verified with FERPA UUID mapping.
+            All 3 upload components staged & verified with DPDP 2023 UUID mapping.
           </p>
         </div>
         <Button

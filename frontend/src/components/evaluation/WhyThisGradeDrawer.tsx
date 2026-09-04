@@ -94,7 +94,7 @@ export const WhyThisGradeDrawer: React.FC<WhyThisGradeDrawerProps> = ({
           </p>
         </div>
 
-        {/* FERPA Security */}
+        {/* DPDP 2023 Security */}
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-slate-400 text-[11px]">
           <ShieldCheck className="w-4 h-4 text-emerald-500" />
           <span>Processed anonymously using Student UUID {question.studentUUID}</span>
