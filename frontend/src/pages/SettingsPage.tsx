@@ -39,7 +39,7 @@ export const SettingsPage: React.FC = () => {
     confidenceThreshold: 75,
     manualReviewThreshold: 80,
     autoFinalizeHighConfidence: true,
-    demoMode: true,
+    demoMode: false,
   })
 
   const [evaluatorName, setEvaluatorName] = useState(user.name)

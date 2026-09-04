@@ -1,0 +1,11 @@
+ backend/app/core/config.py                    |  22 [32m+[m[31m--[m
+ backend/app/main.py                           |  98 [32m++++++[m[31m-----[m
+ backend/app/services/featherless_service.py   |  95 [32m+++++[m[31m-----[m
+ backend/requirements.txt                      | Bin [31m42[m -> [32m898[m bytes
+ frontend/src/api/reportService.ts             | 241 [32m++++++[m[31m--------------------[m
+ frontend/src/components/layouts/TopNavbar.tsx |   6 [32m+[m[31m-[m
+ frontend/src/contexts/EvaluationContext.tsx   |  17 [32m+[m[31m-[m
+ frontend/src/pages/SettingsPage.tsx           |   2 [32m+[m[31m-[m
+ frontend/src/services/evaluationService.ts    |  86 [32m+++[m[31m------[m
+ frontend/src/services/settingsService.ts      |   2 [32m+[m[31m-[m
+ 10 files changed, 209 insertions(+), 360 deletions(-)

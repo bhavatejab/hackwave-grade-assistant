@@ -117,11 +117,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
         {/* Right Side: Demo Badge, Help Link, Theme Toggle, Notifications, User Profile */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Demo Mode Badge */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold border border-emerald-200 dark:border-emerald-800/60">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Demo Mode: ON</span>
-          </div>
+          {/* Demo Mode Badge Removed */}
 
           {/* Help Link */}
           <button

@@ -19,7 +19,7 @@ export const DEFAULT_SETTINGS: TeacherSettings = {
   confidenceThreshold: 75,
   manualReviewThreshold: 80,
   autoFinalizeHighConfidence: true,
-  demoMode: true,
+  demoMode: false,
 }
 
 export const settingsService = {

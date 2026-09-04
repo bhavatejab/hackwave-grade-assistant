@@ -50,7 +50,22 @@ const getInitialEvaluation = (): EvaluationResultPayload => {
   } catch (e) {
     console.error('Failed reading evaluation state from localStorage', e)
   }
-  return MOCK_EVALUATION_RESULT
+  return {
+    assessmentName: '',
+    subject: '',
+    className: '',
+    section: '',
+    assessmentDate: '',
+    instructions: '',
+    maximumMarks: 0,
+    overallScore: 0,
+    overallConfidence: 0,
+    questionsEvaluated: 0,
+    questionsRequiringReview: 0,
+    teacherOverrides: 0,
+    status: 'draft',
+    questions: [],
+  }
 }
 
 export const EvaluationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
