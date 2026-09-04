@@ -9,6 +9,7 @@ import { Button } from '../components/ui/Button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card'
 import { PrivacyCard } from '../components/ui/PrivacyCard'
 import { evaluationService } from '../services/evaluationService'
+import { useEvaluation } from '../contexts/EvaluationContext'
 
 const newEvalSchema = z.object({
   assessmentName: z.string().min(2, 'Assessment Name is required'),
@@ -24,6 +25,7 @@ type NewEvalFormData = z.infer<typeof newEvalSchema>
 
 export const NewEvaluationPage: React.FC = () => {
   const navigate = useNavigate()
+  const { evaluation, updateEvaluationConfig } = useEvaluation()
   const [isDraftSaved, setIsDraftSaved] = useState(false)
 
   const {
@@ -33,11 +35,11 @@ export const NewEvaluationPage: React.FC = () => {
   } = useForm<NewEvalFormData>({
     resolver: zodResolver(newEvalSchema),
     defaultValues: {
-      assessmentName: 'CS106B Midterm Examination',
+      assessmentName: evaluation.assessmentName || 'CS106B Midterm Examination',
       subject: 'Computer Science',
-      className: 'CS106B',
+      className: evaluation.courseCode || 'CS106B',
       section: 'Section A',
-      maxMarks: 100,
+      maxMarks: evaluation.maximumMarks !== undefined ? evaluation.maximumMarks : 100,
       assessmentDate: '2026-09-04',
       instructions: 'Standard closed-book midterm examination. Evaluated using UUID anonymization.',
     },
@@ -49,6 +51,13 @@ export const NewEvaluationPage: React.FC = () => {
   }
 
   const onSubmit = async (data: NewEvalFormData) => {
+    updateEvaluationConfig({
+      assessmentName: data.assessmentName,
+      subject: data.subject,
+      className: data.className,
+      section: data.section,
+      maximumMarks: Number(data.maxMarks),
+    })
     await evaluationService.createEvaluation(data)
     navigate('/evaluations/upload')
   }

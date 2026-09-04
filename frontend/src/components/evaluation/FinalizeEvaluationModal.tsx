@@ -3,6 +3,7 @@ import { CheckCircle2, Award, Edit3, ShieldCheck, ArrowRight } from 'lucide-reac
 import { Dialog } from '../ui/Dialog'
 import { Button } from '../ui/Button'
 import { PrivacyBadge } from '../ui/PrivacyBadge'
+import { useEvaluation } from '../../contexts/EvaluationContext'
 
 export interface FinalizeEvaluationModalProps {
   isOpen: boolean
@@ -23,6 +24,7 @@ export const FinalizeEvaluationModal: React.FC<FinalizeEvaluationModalProps> = (
   overrideCount,
   reviewsCompletedCount,
 }) => {
+  const { evaluation } = useEvaluation()
   const [isFinalizing, setIsFinalizing] = useState(false)
 
   const handleFinalize = async () => {
@@ -37,7 +39,7 @@ export const FinalizeEvaluationModal: React.FC<FinalizeEvaluationModalProps> = (
       isOpen={isOpen}
       onClose={onClose}
       title="Finalize Assessment Evaluation"
-      description="Confirm and lock the evaluation score. Verified grade sheets will be published to the registrar."
+      description={`Confirm and lock evaluation score for ${evaluation.assessmentName}. Verified grade sheets will be published to the registrar.`}
       maxWidth="md"
     >
       <div className="space-y-6 pt-2">

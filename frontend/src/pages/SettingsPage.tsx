@@ -184,7 +184,7 @@ export const SettingsPage: React.FC = () => {
               <select
                 value={settings.language}
                 onChange={(e) => setSettings({ ...settings, language: e.target.value as any })}
-                className="w-full md:w-64 px-3 py-2 rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+                className="app-select w-full md:w-64"
               >
                 <option value="English">English (United States)</option>
                 <option value="Spanish">Spanish (Español)</option>

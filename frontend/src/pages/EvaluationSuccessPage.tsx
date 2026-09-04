@@ -6,8 +6,13 @@ import { Button } from '../components/ui/Button'
 import { StatCard } from '../components/dashboard/StatCard'
 import { PrivacyCard } from '../components/ui/PrivacyCard'
 
+import { useEvaluation } from '../contexts/EvaluationContext'
+
 export const EvaluationSuccessPage: React.FC = () => {
   const navigate = useNavigate()
+  const { evaluation } = useEvaluation()
+
+  const overallPercentage = Math.round((evaluation.overallScore / evaluation.maximumMarks) * 100)
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-12">
@@ -23,33 +28,33 @@ export const EvaluationSuccessPage: React.FC = () => {
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight">Evaluation Completed!</h1>
         <p className="text-sm text-emerald-100 max-w-md mx-auto leading-relaxed">
-          All student answer sheets have been processed and scored against the rubric using anonymous UUID anonymization.
+          All student answer sheets have been processed and scored against the rubric ({evaluation.maximumMarks} Max Marks) using anonymous UUID anonymization.
         </p>
       </motion.div>
 
       <PrivacyCard />
 
       {/* Summary Metrics required by prompt */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard
-          title="Students Processed"
-          value="48"
-          change="100% Batch"
+          title="Overall Score"
+          value={`${evaluation.overallScore} / ${evaluation.maximumMarks}`}
+          change={`${overallPercentage}% Mean`}
           isPositive={true}
-          description="All submissions mapped to STU-UUIDs"
-          iconName="total"
+          description="Average student marks"
+          iconName="score"
         />
         <StatCard
           title="Average Confidence"
-          value="96.8%"
+          value={`${evaluation.overallConfidence}%`}
           change="+2.4%"
           isPositive={true}
-          description="High confidence auto-evaluation threshold"
+          description="High confidence threshold"
           iconName="confidence"
         />
         <StatCard
           title="Questions Evaluated"
-          value="10"
+          value={evaluation.questionsEvaluated}
           change="Full Paper"
           isPositive={true}
           description="Complete exam rubric coverage"
@@ -71,7 +76,7 @@ export const EvaluationSuccessPage: React.FC = () => {
         <Button
           variant="primary"
           size="lg"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/evaluations/results')}
           rightIcon={<ArrowRight className="w-4 h-4" />}
         >
           View Detailed Evaluation Results

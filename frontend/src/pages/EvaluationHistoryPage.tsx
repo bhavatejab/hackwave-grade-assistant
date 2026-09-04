@@ -22,6 +22,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table'
 import { useNotifications } from '../contexts/NotificationContext'
+import { useEvaluation } from '../contexts/EvaluationContext'
 
 export const EvaluationHistoryPage: React.FC = () => {
   const navigate = useNavigate()
@@ -81,6 +82,8 @@ export const EvaluationHistoryPage: React.FC = () => {
     fetchReports()
   }, [fetchReports])
 
+  const { refreshMetrics } = useEvaluation()
+
   const handleArchiveReport = async (id: string) => {
     await reportService.archiveReport(id)
     addNotification({
@@ -89,6 +92,7 @@ export const EvaluationHistoryPage: React.FC = () => {
       message: 'The evaluation report has been moved to Archived Reports.',
     })
     fetchReports()
+    refreshMetrics()
   }
 
   const handleDeleteReport = async (id: string) => {
@@ -99,6 +103,7 @@ export const EvaluationHistoryPage: React.FC = () => {
       message: 'The evaluation report was deleted successfully.',
     })
     fetchReports()
+    refreshMetrics()
   }
 
   const handleExportComplete = (format: string, scope: string) => {
@@ -165,7 +170,7 @@ export const EvaluationHistoryPage: React.FC = () => {
             <select
               value={subjectFilter}
               onChange={(e) => setSubjectFilter(e.target.value)}
-              className="px-3 py-2 text-xs rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+              className="app-select"
             >
               <option value="all">All Subjects</option>
               <option value="computer science">Computer Science</option>
@@ -177,7 +182,7 @@ export const EvaluationHistoryPage: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 text-xs rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+              className="app-select"
             >
               <option value="all">All Statuses</option>
               <option value="completed">Completed</option>
@@ -244,7 +249,7 @@ export const EvaluationHistoryPage: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-3 py-1.5 rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+                className="app-select w-full"
               >
                 <option value="date">Evaluation Date</option>
                 <option value="score">Average Score</option>
@@ -260,7 +265,7 @@ export const EvaluationHistoryPage: React.FC = () => {
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as any)}
-                className="w-full px-3 py-1.5 rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+                className="app-select w-full"
               >
                 <option value="desc">Descending (High to Low)</option>
                 <option value="asc">Ascending (Low to High)</option>

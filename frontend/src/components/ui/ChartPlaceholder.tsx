@@ -17,10 +17,10 @@ export const ChartPlaceholder: React.FC<ChartPlaceholderProps> = ({
   className,
 }) => {
   const barData = [
-    { label: '90-100%', height: 85, color: 'bg-blue-600 dark:bg-blue-500' },
-    { label: '80-89%', height: 65, color: 'bg-blue-500 dark:bg-blue-400' },
-    { label: '70-79%', height: 45, color: 'bg-amber-500 dark:bg-amber-400' },
-    { label: '60-69%', height: 25, color: 'bg-emerald-500 dark:bg-emerald-400' },
+    { label: '90-100%', height: 85, color: 'bg-[#22C55E] dark:bg-green-500' },
+    { label: '80-89%', height: 65, color: 'bg-emerald-500 dark:bg-emerald-400' },
+    { label: '70-79%', height: 45, color: 'bg-blue-500 dark:bg-blue-400' },
+    { label: '60-69%', height: 25, color: 'bg-slate-400 dark:bg-slate-500' },
     { label: '< 60%', height: 15, color: 'bg-red-500 dark:bg-red-400' },
   ]
 
@@ -36,7 +36,7 @@ export const ChartPlaceholder: React.FC<ChartPlaceholderProps> = ({
           <h4 className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h4>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-xs font-semibold border border-blue-200 dark:border-blue-800/60">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-950/50 text-[#22C55E] dark:text-green-400 text-xs font-semibold border border-green-200 dark:border-green-800/60">
           <TrendingUp className="w-3.5 h-3.5" />
           <span>+8.4% Confidence</span>
         </div>

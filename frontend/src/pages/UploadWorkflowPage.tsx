@@ -7,9 +7,11 @@ import { StudentAnswersUploadCard } from '../components/evaluation/StudentAnswer
 import { UploadHistoryList } from '../components/evaluation/UploadHistoryList'
 import { PrivacyCard } from '../components/ui/PrivacyCard'
 import { Button } from '../components/ui/Button'
+import { useEvaluation } from '../contexts/EvaluationContext'
 
 export const UploadWorkflowPage: React.FC = () => {
   const navigate = useNavigate()
+  const { evaluation } = useEvaluation()
   const [qpSelected, setQpSelected] = useState<File | null>(null)
   const [rubricSelected, setRubricSelected] = useState<File | null>(null)
   const [isStarting, setIsStarting] = useState(false)
@@ -34,7 +36,7 @@ export const UploadWorkflowPage: React.FC = () => {
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Stage the Question Paper, Answer Key Rubric, and Student Answer Sheets.
+            Stage Question Paper, Rubric, and Student Answer Sheets for <span className="font-semibold text-slate-900 dark:text-slate-200">{evaluation.assessmentName}</span> ({evaluation.courseCode} • {evaluation.section} • {evaluation.maximumMarks} Max Marks).
           </p>
         </div>
 

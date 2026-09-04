@@ -53,7 +53,7 @@ export const AnalyticsPage: React.FC = () => {
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-3 py-1.5 text-xs rounded-xl border bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+            className="app-select"
           >
             <option value="30d">Last 30 Days</option>
             <option value="6m">Last 6 Months</option>
@@ -78,7 +78,7 @@ export const AnalyticsPage: React.FC = () => {
       <PrivacyBadge variant="banner" />
 
       {/* Executive Summary Stat Cards required by prompt (6 cards) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="Total Evaluations"
           value={data.totalEvaluations}

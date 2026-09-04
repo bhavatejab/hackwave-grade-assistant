@@ -16,10 +16,12 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table'
 import { useNotifications } from '../contexts/NotificationContext'
+import { useEvaluation } from '../contexts/EvaluationContext'
 
 export const ArchivedReportsPage: React.FC = () => {
   const navigate = useNavigate()
   const { addNotification } = useNotifications()
+  const { refreshMetrics } = useEvaluation()
 
   const [reports, setReports] = useState<ReportSummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -51,6 +53,7 @@ export const ArchivedReportsPage: React.FC = () => {
       message: 'The evaluation report has been restored to Evaluation History.',
     })
     fetchArchived()
+    refreshMetrics()
   }
 
   const handleDeletePermanently = async (id: string) => {
@@ -61,6 +64,7 @@ export const ArchivedReportsPage: React.FC = () => {
       message: 'The evaluation report was permanently deleted.',
     })
     fetchArchived()
+    refreshMetrics()
   }
 
   return (

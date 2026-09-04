@@ -113,7 +113,7 @@ export const EvaluationReportPage: React.FC = () => {
       <PermanentStorageBanner />
 
       {/* Summary Metrics Cards required by prompt */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="Student Papers"
           value={report.studentCount}

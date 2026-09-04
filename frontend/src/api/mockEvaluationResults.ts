@@ -40,6 +40,11 @@ export interface EvaluationResultPayload {
   status: 'auto_graded' | 'pending_review' | 'finalized'
   assessmentName: string
   courseCode: string
+  subject: string
+  className: string
+  section: string
+  assessmentDate: string
+  instructions?: string
   questions: QuestionEvaluation[]
 }
 
@@ -54,6 +59,11 @@ export const MOCK_EVALUATION_RESULT: EvaluationResultPayload = {
   status: 'pending_review',
   assessmentName: 'CS106B Midterm Examination',
   courseCode: 'CS106B',
+  subject: 'Computer Science',
+  className: 'CS106B',
+  section: 'Section A',
+  assessmentDate: '2026-09-04',
+  instructions: 'Standard closed-book midterm examination. Evaluated using UUID anonymization.',
   questions: [
     {
       id: 'q1',

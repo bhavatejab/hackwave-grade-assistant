@@ -45,21 +45,21 @@ export const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div className={cn('relative w-full', className)} ref={dropdownRef}>
       {label && (
-        <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+        <label className="block text-xs font-semibold text-slate-700 dark:text-[#CBD5E1] uppercase tracking-wider mb-2">
           {label}
         </label>
       )}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3.5 py-2.5 text-sm rounded-xl border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 hover:border-slate-300 dark:hover:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+        className="w-full h-[52px] px-4 flex items-center justify-between text-base font-medium rounded-2xl border bg-white dark:bg-[#111827] border-slate-200 dark:border-[#334155] text-slate-900 dark:text-[#F8FAFC] hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-[#22C55E] transition-all cursor-pointer select-none"
       >
-        <span className="flex items-center gap-2 truncate">
+        <span className={cn('flex items-center gap-2 truncate whitespace-nowrap text-left flex-1 min-w-0 pr-2 text-base font-medium', !selectedOption && 'text-[#64748B] dark:text-[#94A3B8]')}>
           {selectedOption?.icon}
-          <span>{selectedOption ? selectedOption.label : placeholder}</span>
+          <span className="truncate whitespace-nowrap">{selectedOption ? selectedOption.label : placeholder}</span>
         </span>
         <ChevronDown
-          className={cn('w-4 h-4 text-slate-400 transition-transform duration-200', isOpen && 'rotate-180')}
+          className={cn('w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200', isOpen && 'rotate-180')}
         />
       </button>
 
@@ -70,7 +70,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             animate={{ opacity: 1, y: 4, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg overflow-hidden py-1 max-h-60 overflow-y-auto"
+            className="absolute z-50 w-full mt-2 bg-white dark:bg-[#111827] border border-slate-200 dark:border-[#334155] rounded-2xl shadow-xl overflow-hidden p-1.5 max-h-60 overflow-y-auto"
           >
             {options.map((opt) => {
               const isSelected = opt.value === value
@@ -83,20 +83,22 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     setIsOpen(false)
                   }}
                   className={cn(
-                    'w-full flex items-center justify-between px-3.5 py-2 text-sm text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-800',
-                    isSelected && 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-medium'
+                    'w-full h-[44px] px-4 flex items-center justify-between text-sm rounded-xl transition-colors text-left truncate whitespace-nowrap shrink-0',
+                    isSelected
+                      ? 'bg-green-50 dark:bg-green-950/40 text-[#22C55E] dark:text-green-400 font-semibold'
+                      : 'text-slate-700 dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#1E293B]'
                   )}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 truncate flex-1 min-w-0">
                     {opt.icon}
-                    <div>
-                      <div>{opt.label}</div>
+                    <div className="truncate flex-1 min-w-0">
+                      <div className="truncate whitespace-nowrap">{opt.label}</div>
                       {opt.description && (
-                        <div className="text-xs text-slate-400 font-normal">{opt.description}</div>
+                        <div className="text-xs text-slate-400 font-normal truncate">{opt.description}</div>
                       )}
                     </div>
                   </div>
-                  {isSelected && <Check className="w-4 h-4 text-blue-600 dark:text-blue-400" />}
+                  {isSelected && <Check className="w-4 h-4 text-[#22C55E] dark:text-green-400 shrink-0 ml-2" />}
                 </button>
               )
             })}

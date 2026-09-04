@@ -68,7 +68,7 @@ export const DashboardHome: React.FC = () => {
       <PrivacyBadge variant="banner" />
 
       {/* Key Metric Statistics Cards (6 required metrics) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="Total Evaluations"
           value="1,428"

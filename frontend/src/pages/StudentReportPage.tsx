@@ -145,7 +145,7 @@ export const StudentReportPage: React.FC = () => {
       <PermanentStorageBanner />
 
       {/* Summary Cards required by prompt */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Overall Marks"
           value={`${studentReport.totalMarks} / ${studentReport.maximumMarks}`}

@@ -31,8 +31,8 @@ export const UploadCard: React.FC<UploadCardProps> = ({
       className={cn(
         'rounded-2xl border-2 border-dashed transition-all p-8 text-center bg-white dark:bg-slate-900',
         isDragOver
-          ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 shadow-lg'
-          : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700',
+          ? 'border-green-600 bg-green-50/50 dark:bg-green-950/20 shadow-lg'
+          : 'border-green-500/60 hover:border-green-600 dark:border-green-800/80',
         className
       )}
       onDragOver={(e) => {
@@ -49,7 +49,7 @@ export const UploadCard: React.FC<UploadCardProps> = ({
         }
       }}
     >
-      <div className="mx-auto w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 border border-blue-100 dark:border-blue-900/50 shadow-inner">
+      <div className="mx-auto w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-950/50 text-[#22C55E] dark:text-green-400 flex items-center justify-center mb-4 border border-green-100 dark:border-green-900/50 shadow-inner">
         <Upload className="w-7 h-7" />
       </div>
 

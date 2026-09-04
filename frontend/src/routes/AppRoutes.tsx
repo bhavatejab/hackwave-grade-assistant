@@ -24,7 +24,7 @@ const ErrorStatesPage = lazy(() => import('../pages/ErrorStatesPage').then((m) =
 
 const LoadingFallback: React.FC = () => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
-    <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+    <div className="w-8 h-8 border-3 border-[#22C55E] border-t-transparent rounded-full animate-spin" />
     <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
       Loading Enterprise Workspace...
     </span>
@@ -42,6 +42,8 @@ export const AppRoutes: React.FC = () => {
           <Route path="/evaluations/progress" element={<EvaluationProgressPage />} />
           <Route path="/evaluations/success" element={<EvaluationSuccessPage />} />
           <Route path="/evaluations/results" element={<EvaluationResultsPage />} />
+          <Route path="/evaluations/results/:evaluationId" element={<EvaluationResultsPage />} />
+          <Route path="/evaluation-results/:evaluationId" element={<EvaluationResultsPage />} />
           <Route path="/evaluations/review" element={<TeacherReviewPage />} />
           <Route path="/uploads" element={<UploadWorkflowPage />} />
           <Route path="/manual-review" element={<ManualReviewPage />} />

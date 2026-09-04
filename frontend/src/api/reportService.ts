@@ -9,7 +9,27 @@ import {
   MOCK_ANALYTICS_DATA,
 } from './mockReports'
 
-let mockReportsStore: ReportSummary[] = [...INITIAL_MOCK_REPORTS]
+const getStoredReports = (): ReportSummary[] => {
+  try {
+    const data = localStorage.getItem('smart_grade_reports_store')
+    if (data) {
+      return JSON.parse(data)
+    }
+  } catch (e) {
+    console.error('Error reading reports store from localStorage', e)
+  }
+  return [...INITIAL_MOCK_REPORTS]
+}
+
+let mockReportsStore: ReportSummary[] = getStoredReports()
+
+const saveReportsStore = () => {
+  try {
+    localStorage.setItem('smart_grade_reports_store', JSON.stringify(mockReportsStore))
+  } catch (e) {
+    console.error('Error saving reports store to localStorage', e)
+  }
+}
 
 export interface GetReportsFilter {
   search?: string
@@ -197,12 +217,20 @@ export const reportService = {
     return MOCK_ANALYTICS_DATA
   },
 
+  async addFinalizedReport(report: ReportSummary): Promise<ReportSummary> {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    mockReportsStore = [report, ...mockReportsStore.filter((r) => r.id !== report.id)]
+    saveReportsStore()
+    return report
+  },
+
   async archiveReport(id: string): Promise<boolean> {
     await new Promise((resolve) => setTimeout(resolve, 100))
     const item = mockReportsStore.find((r) => r.id === id)
     if (item) {
       item.isArchived = true
       item.status = 'archived'
+      saveReportsStore()
       return true
     }
     return false
@@ -214,6 +242,7 @@ export const reportService = {
     if (item) {
       item.isArchived = false
       item.status = 'completed'
+      saveReportsStore()
       return true
     }
     return false
@@ -222,6 +251,7 @@ export const reportService = {
   async deleteReport(id: string): Promise<boolean> {
     await new Promise((resolve) => setTimeout(resolve, 100))
     mockReportsStore = mockReportsStore.filter((r) => r.id !== id)
+    saveReportsStore()
     return true
   },
 }

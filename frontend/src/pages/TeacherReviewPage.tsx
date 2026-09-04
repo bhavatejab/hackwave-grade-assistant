@@ -29,7 +29,7 @@ export const TeacherReviewPage: React.FC = () => {
             Teacher Evaluation & Review Workspace
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            High-level instructor review, mark overrides, and per-question rubric inspection.
+            Instructor review & mark overrides for <span className="font-semibold text-slate-900 dark:text-slate-200">{evaluation.assessmentName}</span> ({evaluation.courseCode} • {evaluation.section} • {evaluation.maximumMarks} Max Marks).
           </p>
         </div>
 

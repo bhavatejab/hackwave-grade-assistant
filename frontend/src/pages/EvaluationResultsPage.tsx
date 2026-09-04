@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   CheckSquare,
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  Download,
+  ArrowLeft,
+  AlertTriangle,
+  FileSpreadsheet,
 } from 'lucide-react'
 import { QuestionEvaluation } from '../api/mockEvaluationResults'
 import { QuestionNavigator } from '../components/evaluation/QuestionNavigator'
@@ -12,20 +16,30 @@ import { QuestionCard } from '../components/evaluation/QuestionCard'
 import { WhyThisGradeDrawer } from '../components/evaluation/WhyThisGradeDrawer'
 import { ChallengeAiModal } from '../components/evaluation/ChallengeAiModal'
 import { FinalizeEvaluationModal } from '../components/evaluation/FinalizeEvaluationModal'
+import { ExportModal } from '../components/reports/ExportModal'
 import { StatCard } from '../components/dashboard/StatCard'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { PrivacyCard } from '../components/ui/PrivacyCard'
 import { useEvaluation } from '../contexts/EvaluationContext'
+import { useNotifications } from '../contexts/NotificationContext'
 
 export const EvaluationResultsPage: React.FC = () => {
   const navigate = useNavigate()
+  const { evaluationId } = useParams<{ evaluationId?: string }>()
+  const [searchParams] = useSearchParams()
   const { evaluation, overrideQuestionMarks, finalizeEvaluation } = useEvaluation()
+  const { addNotification } = useNotifications()
+
+  const requestedId = evaluationId || searchParams.get('id')
+  // Check if explicit invalid ID is passed (e.g. 'invalid', 'not-found')
+  const isInvalidId = requestedId === 'invalid' || requestedId === 'not-found' || (Boolean(requestedId) && requestedId !== 'eval-123' && requestedId !== 'eval-1' && requestedId !== 'STU-A91F23' && requestedId !== evaluation.studentUUID)
 
   const [activeQuestionId, setActiveQuestionId] = useState<string>('q1')
   const [drawerQuestion, setDrawerQuestion] = useState<QuestionEvaluation | null>(null)
   const [challengeQuestion, setChallengeQuestion] = useState<QuestionEvaluation | null>(null)
   const [isFinalizeModalOpen, setIsFinalizeModalOpen] = useState(false)
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
 
   const activeIndex = evaluation.questions.findIndex((q) => q.id === activeQuestionId)
 
@@ -84,6 +98,47 @@ export const EvaluationResultsPage: React.FC = () => {
     }
   }
 
+  if (isInvalidId) {
+    return (
+      <div className="space-y-6 max-w-4xl mx-auto py-12">
+        <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl text-center space-y-6">
+          <div className="w-16 h-16 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto border border-amber-500/20 shadow-inner">
+            <AlertTriangle className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              Evaluation Not Found
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+              The requested evaluation session or ID (<span className="font-mono text-emerald-600 dark:text-emerald-400">{requestedId}</span>) could not be retrieved from active workspace records.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => navigate('/uploads')}
+              leftIcon={<ArrowLeft className="w-4 h-4" />}
+            >
+              Back to Evaluation Queue
+            </Button>
+
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => navigate('/history')}
+              leftIcon={<FileSpreadsheet className="w-4 h-4" />}
+            >
+              View Reports & History
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-8 pb-16 max-w-7xl mx-auto">
       {/* Header Banner */}
@@ -98,11 +153,29 @@ export const EvaluationResultsPage: React.FC = () => {
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {evaluation.assessmentName} ({evaluation.courseCode}) • Student UUID {evaluation.studentUUID}
+            {evaluation.assessmentName} ({evaluation.courseCode} • {evaluation.section}) • Student UUID {evaluation.studentUUID} • {evaluation.maximumMarks} Max Marks
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <Button
+            variant="outline"
+            size="md"
+            onClick={() => navigate('/uploads')}
+            leftIcon={<ArrowLeft className="w-4 h-4 text-slate-400" />}
+          >
+            Back to Queue
+          </Button>
+
+          <Button
+            variant="outline"
+            size="md"
+            onClick={() => setIsExportModalOpen(true)}
+            leftIcon={<Download className="w-4 h-4 text-emerald-500" />}
+          >
+            Export Report
+          </Button>
+
           <Button
             variant="outline"
             size="md"
@@ -126,7 +199,7 @@ export const EvaluationResultsPage: React.FC = () => {
       <PrivacyCard text="Student identities remain hidden from AI. Per-question evidence and reasoning are generated against anonymous UUID STU-A91F23." />
 
       {/* TOP SUMMARY CARDS displaying single source of truth state */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="Overall Marks"
           value={`${evaluation.overallScore} / ${evaluation.maximumMarks}`}
@@ -265,7 +338,21 @@ export const EvaluationResultsPage: React.FC = () => {
         onConfirmFinalize={() => {
           finalizeEvaluation()
           setIsFinalizeModalOpen(false)
-          navigate('/')
+          navigate('/reports')
+        }}
+      />
+
+      {/* EXPORT MODAL */}
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        assessmentName={evaluation.assessmentName}
+        onExportComplete={(fmt, sc) => {
+          addNotification({
+            title: 'Report Exported',
+            message: `${fmt} report exported successfully (${sc} scope).`,
+            type: 'success',
+          })
         }}
       />
     </div>

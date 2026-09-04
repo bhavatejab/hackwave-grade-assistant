@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { EvaluationPipelineProgress, PipelineStep } from '../components/evaluation/EvaluationPipelineProgress'
 import { PrivacyCard } from '../components/ui/PrivacyCard'
 
+import { useEvaluation } from '../contexts/EvaluationContext'
+
 export const EvaluationProgressPage: React.FC = () => {
   const navigate = useNavigate()
+  const { evaluation } = useEvaluation()
   const [progress, setProgress] = useState(45)
   const [estimatedTime, setEstimatedTime] = useState(28)
 
@@ -71,7 +74,7 @@ export const EvaluationProgressPage: React.FC = () => {
           </span>
         </div>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Automated evaluation pipeline executing. Submissions are processed with UUID anonymization.
+          Evaluating <span className="font-semibold text-slate-900 dark:text-slate-200">{evaluation.assessmentName}</span> ({evaluation.courseCode} • {evaluation.section} • {evaluation.maximumMarks} Max Marks) with UUID anonymization.
         </p>
       </div>
 

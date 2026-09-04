@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Menu,
@@ -13,6 +13,7 @@ import {
   HelpCircle,
   Settings,
   Sparkles,
+  Calendar,
 } from 'lucide-react'
 import { cn } from '../../utils/cn'
 import { useTheme } from '../../contexts/ThemeContext'
@@ -31,6 +32,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   onToggleMobileSidebar,
 }) => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { theme, toggleTheme } = useTheme()
   const { user, logout } = useAuth()
   const { unreadCount } = useNotifications()
@@ -42,6 +44,30 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const profileRef = useRef<HTMLDivElement>(null)
   const notifRef = useRef<HTMLDivElement>(null)
+
+  // Current Date Formatter required by prompt
+  const currentDateFormatted = new Date('2026-09-04T16:00:00').toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+
+  // Dynamic Page Title required by prompt
+  const getPageTitle = () => {
+    const p = location.pathname
+    if (p === '/') return 'Dashboard Overview'
+    if (p.startsWith('/evaluations/new')) return 'Create New Evaluation'
+    if (p.startsWith('/uploads')) return 'Evaluation Queue'
+    if (p.startsWith('/manual-review')) return 'Teacher Manual Review'
+    if (p.startsWith('/students')) return 'Student Directory'
+    if (p.startsWith('/history') || p.startsWith('/reports')) return 'Evaluation Reports'
+    if (p.startsWith('/analytics')) return 'Institutional Analytics'
+    if (p.startsWith('/archived')) return 'Archived Reports'
+    if (p.startsWith('/settings')) return 'Settings & Thresholds'
+    if (p.startsWith('/help')) return 'Help & Support Center'
+    return 'Smart Grade Assistant'
+  }
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -57,18 +83,31 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   }, [])
 
   return (
-    <header className="sticky top-0 z-20 w-full h-18 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200 shrink-0">
+    <header className="sticky top-0 z-20 w-full h-18 bg-white/85 dark:bg-[#020617]/85 backdrop-blur-md border-b border-slate-200/80 dark:border-[#334155] transition-colors duration-200 shrink-0">
       <div className="flex items-center justify-between h-full px-4 sm:px-6 gap-4">
-        {/* Left Side: Mobile sidebar trigger & Global Search */}
-        <div className="flex items-center gap-3 flex-1 max-w-xl">
+        {/* Left Side: Mobile Sidebar Trigger & Dynamic Page Title */}
+        <div className="flex items-center gap-3">
           <button
             onClick={onToggleMobileSidebar}
-            className="md:hidden p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="md:hidden p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-[#1E293B]"
             title="Open navigation menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
+          <div className="flex flex-col">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-[#F8FAFC] tracking-tight leading-snug">
+              {getPageTitle()}
+            </h2>
+            <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-[#94A3B8]">
+              <Calendar className="w-3 h-3 text-[#22C55E]" />
+              <span>{currentDateFormatted}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Middle: Global Search Bar */}
+        <div className="hidden md:flex flex-1 max-w-md mx-4">
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
@@ -78,25 +117,25 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
         {/* Right Side: Demo Badge, Help Link, Theme Toggle, Notifications, User Profile */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Demo Mode Badge required by prompt */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold border border-emerald-200 dark:border-emerald-800">
+          {/* Demo Mode Badge */}
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold border border-emerald-200 dark:border-emerald-800/60">
             <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
             <span>Demo Mode: ON</span>
           </div>
 
-          {/* Help & FAQ Link */}
+          {/* Help Link */}
           <button
             onClick={() => navigate('/help')}
-            className="p-2.5 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            title="Help & FAQ"
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            title="Help & Support"
           >
-            <HelpCircle className="w-4 h-4 text-blue-500" />
+            <HelpCircle className="w-4 h-4 text-slate-500" />
           </button>
 
           {/* Theme Switcher */}
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
           >
             {theme === 'light' ? (
@@ -110,14 +149,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <div className="relative" ref={notifRef}>
             <button
               onClick={() => setIsNotifOpen(!isNotifOpen)}
-              className="relative p-2.5 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="relative p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 animate-ping" />
               )}
               {unreadCount > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500" />
               )}
             </button>
 
@@ -132,21 +171,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+              className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
             >
               <img
                 src={user.avatarUrl}
                 alt={user.name}
-                className="w-8 h-8 rounded-lg object-cover ring-2 ring-blue-500/20"
+                className="w-8 h-8 rounded-xl object-cover ring-2 ring-green-500/20"
               />
-              <div className="hidden lg:flex flex-col text-left">
-                <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-tight">
-                  {user.name}
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                  {user.institution}
-                </span>
-              </div>
               <ChevronDown className="hidden sm:block w-3.5 h-3.5 text-slate-400" />
             </button>
 
@@ -166,7 +197,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                       {user.email}
                     </p>
-                    <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 text-[10px] font-semibold border border-blue-200 dark:border-blue-800">
+                    <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-green-50 dark:bg-green-950/60 text-green-700 dark:text-green-300 text-[10px] font-semibold border border-green-200 dark:border-green-800">
                       <ShieldCheck className="w-3 h-3" />
                       <span>{user.role}</span>
                     </div>
@@ -215,7 +246,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </div>
       </div>
 
-      {/* LOGOUT CONFIRMATION MODAL REQUIRED BY PROMPT */}
+      {/* Logout Confirmation Modal */}
       {isLogoutModalOpen && (
         <DeleteConfirmModal
           isOpen={isLogoutModalOpen}

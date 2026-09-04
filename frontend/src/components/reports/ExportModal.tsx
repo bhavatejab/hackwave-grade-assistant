@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Dialog } from '../ui/Dialog'
 import { Button } from '../ui/Button'
 import { Download, FileText, Table as TableIcon, FileCode, CheckCircle2 } from 'lucide-react'
+import { useEvaluation } from '../../contexts/EvaluationContext'
 
 export interface ExportModalProps {
   isOpen: boolean
@@ -13,9 +14,11 @@ export interface ExportModalProps {
 export const ExportModal: React.FC<ExportModalProps> = ({
   isOpen,
   onClose,
-  assessmentName = 'CS106B Midterm Examination',
+  assessmentName,
   onExportComplete,
 }) => {
+  const { evaluation } = useEvaluation()
+  const activeAssessmentName = assessmentName || evaluation?.assessmentName || 'Evaluation Report'
   const [scope, setScope] = useState<'entire' | 'single' | 'selected' | 'question' | 'analytics'>('entire')
   const [format, setFormat] = useState<'pdf' | 'csv' | 'excel'>('pdf')
   const [isExporting, setIsExporting] = useState(false)
@@ -34,7 +37,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Export Evaluation Report"
-      description={`Choose export scope & format for ${assessmentName}`}
+      description={`Choose export scope & format for ${activeAssessmentName}`}
       maxWidth="lg"
     >
       <div className="space-y-5 text-xs text-slate-700 dark:text-slate-300">

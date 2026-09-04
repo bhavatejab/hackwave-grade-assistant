@@ -32,15 +32,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-sm shadow-blue-500/20 focus:ring-blue-500 border border-blue-600',
+        'bg-[#22C55E] hover:bg-[#16A34A] active:bg-[#15803D] text-white shadow-sm focus:ring-green-500 border border-[#22C55E]',
       secondary:
-        'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 focus:ring-slate-400',
+        'bg-white dark:bg-[#0F172A] hover:bg-slate-50 dark:hover:bg-[#1E293B] text-slate-800 dark:text-[#F8FAFC] border border-slate-200 dark:border-[#334155] focus:ring-slate-400',
       outline:
-        'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 focus:ring-slate-400',
+        'bg-transparent hover:bg-slate-100 dark:hover:bg-[#1E293B] text-slate-700 dark:text-[#CBD5E1] border border-slate-300 dark:border-[#334155] focus:ring-slate-400',
       ghost:
-        'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 focus:ring-slate-400',
+        'bg-transparent hover:bg-slate-100 dark:hover:bg-[#1E293B] text-slate-600 dark:text-[#CBD5E1] focus:ring-slate-400',
       danger:
-        'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-sm shadow-red-500/20 focus:ring-red-500 border border-red-600',
+        'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-sm focus:ring-red-500 border border-red-600',
     }
 
     const sizes = {
