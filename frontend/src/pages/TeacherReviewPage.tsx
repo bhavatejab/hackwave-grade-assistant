@@ -106,6 +106,7 @@ export const TeacherReviewPage: React.FC = () => {
         onClose={() => setChallengeQuestion(null)}
         question={challengeQuestion}
         onSubmitChallenge={() => {}}
+        onApplyScore={overrideQuestionMarks}
       />
     </div>
   )

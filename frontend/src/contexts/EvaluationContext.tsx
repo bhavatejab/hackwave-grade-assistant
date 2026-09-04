@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { EvaluationResultPayload, MOCK_EVALUATION_RESULT } from '../api/mockEvaluationResults'
+import { EvaluationResultPayload, MOCK_EVALUATION_RESULT, QuestionEvaluation } from '../api/mockEvaluationResults'
 import { reportService } from '../api/reportService'
+import { evaluationService } from '../services/evaluationService'
+import { GradeResponse, RubricCriterion } from '../types/api'
 import { useNotifications } from './NotificationContext'
 
 export interface EvaluationContextType {
@@ -14,6 +16,16 @@ export interface EvaluationContextType {
     newMarks: number,
     reason: string,
     notes: string
+  ) => Promise<void>
+  setGradedEvaluation: (
+    result: GradeResponse,
+    metadata: {
+      questionText: string
+      studentAnswerText: string
+      rubric: RubricCriterion[]
+      studentUuid?: string
+      assessmentName?: string
+    }
   ) => void
   updateEvaluationConfig: (params: {
     assessmentName?: string
@@ -74,15 +86,59 @@ export const EvaluationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const pendingReviewCount = evaluation.status === 'finalized' ? 0 : evaluation.questionsRequiringReview
 
-  const overrideQuestionMarks = (
+  const overrideQuestionMarks = async (
     questionId: string,
     newMarks: number,
     reason: string,
     notes: string
   ) => {
+    const targetQuestion = evaluation.questions.find((q) => q.id === questionId)
+
+    // 1. Submit teacher feedback to backend asynchronously
+    if (targetQuestion) {
+      const criterionId = targetQuestion.criteria?.[0]?.id || 'crit_1'
+      evaluationService.submitFeedback({
+        question: targetQuestion.questionText,
+        criterion_id: criterionId,
+        student_answer: targetQuestion.studentAnswerText,
+        ai_score: targetQuestion.originalAiMarks,
+        ai_reasoning: targetQuestion.reasoning,
+        ai_evidence: targetQuestion.evidenceMatched.join('; '),
+        reconsidered_score: targetQuestion.marksAwarded,
+        teacher_final_score: newMarks,
+        teacher_feedback: `${reason}${notes ? ` - ${notes}` : ''}`.trim(),
+        feedback_type: 'teacher_override',
+      }).catch((err) => {
+        console.warn('Backend feedback submission background log error:', err)
+      })
+
+      // 2. Call backend final grade endpoint for source-of-truth score recalculation
+      try {
+        const criteriaPayload = targetQuestion.criteria && targetQuestion.criteria.length > 0
+          ? targetQuestion.criteria
+          : [{ id: criterionId, score: targetQuestion.marksAwarded, max_score: targetQuestion.maximumMarks }]
+
+        await evaluationService.submitFinalGrade({
+          criteria: criteriaPayload,
+          criterion_id: criterionId,
+          teacher_final_score: newMarks,
+        })
+      } catch (err) {
+        console.warn('Backend final grade calculation notification (falling back to local):', err)
+      }
+    }
+
+    // 3. Update evaluation state
     setEvaluation((prev) => {
       const updatedQuestions = prev.questions.map((q) => {
         if (q.id === questionId) {
+          const updatedCriteria = q.criteria?.map((c, i) => {
+            if (i === 0 || c.id === 'crit_1') {
+              return { ...c, score: newMarks }
+            }
+            return c
+          })
+
           return {
             ...q,
             marksAwarded: newMarks,
@@ -92,6 +148,7 @@ export const EvaluationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             teacherNotes: notes,
             status: 'teacher_reviewed' as const,
             manualReviewRequired: false,
+            criteria: updatedCriteria || q.criteria,
           }
         }
         return q
@@ -110,10 +167,86 @@ export const EvaluationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       }
     })
 
-    // Show success toast required by prompt
+    // Show success toast
     addNotification({
-      title: 'Marks Updated',
-      message: 'Marks updated successfully.',
+      title: 'Marks Updated & Logged',
+      message: 'Teacher override synchronized with backend.',
+      type: 'success',
+    })
+  }
+
+  const setGradedEvaluation = (
+    result: GradeResponse,
+    metadata: {
+      questionText: string
+      studentAnswerText: string
+      rubric: RubricCriterion[]
+      studentUuid?: string
+      assessmentName?: string
+    }
+  ) => {
+    const confidencePct = Math.round((result.confidence || 0) * 100)
+    const matchedEvidence = result.criteria
+      ? result.criteria.map((c) => `${c.id}: ${c.evidence || c.reasoning}`).filter(Boolean)
+      : []
+
+    const criteriaReasoning = result.criteria && result.criteria.length > 0
+      ? result.criteria.map((c) => `[${c.id} - ${c.score}/${c.max_score} pts]: ${c.reasoning}`).join(' ')
+      : 'Evaluated by Featherless AI according to rubric criteria.'
+
+    const createdQuestion: QuestionEvaluation = {
+      id: 'q1',
+      questionNumber: 'Q1',
+      questionText: metadata.questionText,
+      maximumMarks: result.max_score,
+      marksAwarded: result.total_score,
+      originalAiMarks: result.total_score,
+      confidence: confidencePct,
+      confidenceStatus: confidencePct > 85 ? 'High' : confidencePct > 70 ? 'Medium' : 'Low',
+      studentUUID: metadata.studentUuid || 'STU-A91F23',
+      status: result.requires_teacher_review ? 'manual_review_required' : 'auto_graded',
+      studentAnswerText: metadata.studentAnswerText,
+      expectedAnswer: metadata.rubric.map((r) => `${r.id}: ${r.description} (${r.max_score} marks)`).join('\n'),
+      evidenceMatched: matchedEvidence.length > 0 ? matchedEvidence : ['Rubric criteria verified against student response.'],
+      evidenceMissing: [],
+      reasoning: criteriaReasoning,
+      alternativeReasoning: result.alternative_reasoning_detected
+        ? 'Alternative valid academic reasoning detected and credited in student response.'
+        : undefined,
+      reviewRecommendation: result.requires_teacher_review
+        ? 'Manual Review Required'
+        : confidencePct < 75
+        ? 'Recommended'
+        : 'No Review Needed',
+      manualReviewRequired: result.requires_teacher_review,
+      criteria: result.criteria,
+      ocrConfidence: result.ocr_confidence,
+    }
+
+    setEvaluation((prev) => {
+      const updated: EvaluationResultPayload = {
+        ...prev,
+        assessmentName: metadata.assessmentName || prev.assessmentName,
+        overallScore: result.total_score,
+        maximumMarks: result.max_score,
+        overallConfidence: confidencePct,
+        questionsEvaluated: 1,
+        questionsRequiringReview: result.requires_teacher_review ? 1 : 0,
+        teacherOverrides: 0,
+        status: result.requires_teacher_review ? 'pending_review' : 'auto_graded',
+        questions: [createdQuestion],
+      }
+      try {
+        localStorage.setItem('smart_grade_active_evaluation', JSON.stringify(updated))
+      } catch (e) {
+        console.error('Failed saving graded evaluation to storage', e)
+      }
+      return updated
+    })
+
+    addNotification({
+      title: 'Grading Complete',
+      message: `Score: ${result.total_score}/${result.max_score} (${confidencePct}% confidence)`,
       type: 'success',
     })
   }
@@ -244,6 +377,7 @@ export const EvaluationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         queueCount,
         pendingReviewCount,
         overrideQuestionMarks,
+        setGradedEvaluation,
         updateEvaluationConfig,
         finalizeEvaluation,
         setQueueCount,

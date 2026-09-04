@@ -7,9 +7,9 @@ export interface EnvironmentConfig {
 }
 
 export const env: EnvironmentConfig = {
-  API_BASE_URL: (import.meta.env.VITE_API_BASE_URL as string) || '/api/v1',
+  API_BASE_URL: (import.meta.env.VITE_API_BASE_URL as string) || 'http://127.0.0.1:8000',
   FEATHERLESS_BOUNDARY_ENABLED: true, // Frontend NEVER calls Featherless directly
-  DEMO_MODE_DEFAULT: true,
+  DEMO_MODE_DEFAULT: false,
   ENV_MODE: (import.meta.env.MODE as 'development' | 'production' | 'test') || 'development',
-  API_TIMEOUT_MS: 30000,
+  API_TIMEOUT_MS: 45000,
 }

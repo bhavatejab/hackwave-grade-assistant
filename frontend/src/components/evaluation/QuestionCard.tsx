@@ -266,6 +266,42 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               </div>
             </div>
 
+            {/* SECTION 3B: Criterion-Level Scores, Reasoning & Evidence from Backend */}
+            {question.criteria && question.criteria.length > 0 && (
+              <div className="space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Criterion-Level Evaluation Breakdown ({question.criteria.length})
+                </span>
+                <div className="space-y-2.5">
+                  {question.criteria.map((c) => (
+                    <div
+                      key={c.id}
+                      className="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
+                          Criterion {c.id}
+                        </span>
+                        <span className="font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900">
+                          {c.score} / {c.max_score} marks
+                        </span>
+                      </div>
+                      {c.reasoning && (
+                        <p className="text-xs text-slate-700 dark:text-slate-300">
+                          <strong className="text-slate-900 dark:text-slate-100">Reasoning:</strong> {c.reasoning}
+                        </p>
+                      )}
+                      {c.evidence && (
+                        <p className="text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50/40 dark:bg-emerald-950/20 p-2 rounded-lg border border-emerald-200/50 dark:border-emerald-900/40">
+                          <strong>Evidence from Student Answer:</strong> &quot;{c.evidence}&quot;
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* SECTION 4: AI Reasoning Card */}
             <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/80 dark:border-blue-900/50 space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-blue-900 dark:text-blue-200 uppercase tracking-wider">

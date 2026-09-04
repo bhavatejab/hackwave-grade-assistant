@@ -325,6 +325,7 @@ export const EvaluationResultsPage: React.FC = () => {
         onClose={() => setChallengeQuestion(null)}
         question={challengeQuestion}
         onSubmitChallenge={() => {}}
+        onApplyScore={overrideQuestionMarks}
       />
 
       {/* FINALIZE EVALUATION MODAL */}

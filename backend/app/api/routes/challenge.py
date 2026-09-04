@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.models.grading import (
     ChallengeRequest,
@@ -24,5 +24,7 @@ challenge_service = ChallengeService()
 def challenge_grade(
     request: ChallengeRequest
 ):
-
-    return challenge_service.challenge_grade(request)
+    try:
+        return challenge_service.challenge_grade(request)
+    except ValueError as e:
+        raise HTTPException(status_code=503, detail=str(e))

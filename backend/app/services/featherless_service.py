@@ -1,3 +1,4 @@
+import os
 from openai import OpenAI
 
 from app.core.config import (
@@ -10,15 +11,25 @@ from app.core.config import (
 class FeatherlessService:
 
     def __init__(self):
-        if not FEATHERLESS_API_KEY:
-            raise ValueError("FEATHERLESS_API_KEY is not configured")
-
-        self.client = OpenAI(
-            api_key=FEATHERLESS_API_KEY,
-            base_url=FEATHERLESS_BASE_URL,
-        )
+        self.api_key = FEATHERLESS_API_KEY
+        self.client = None
+        if self.api_key:
+            self.client = OpenAI(
+                api_key=self.api_key,
+                base_url=FEATHERLESS_BASE_URL,
+            )
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
+        if not self.client:
+            from app.core.config import FEATHERLESS_API_KEY as CURRENT_KEY
+            self.api_key = CURRENT_KEY or os.getenv("FEATHERLESS_API_KEY")
+            if not self.api_key:
+                raise ValueError("FEATHERLESS_API_KEY is not configured in backend/.env")
+            self.client = OpenAI(
+                api_key=self.api_key,
+                base_url=FEATHERLESS_BASE_URL,
+            )
+
         response = self.client.chat.completions.create(
             model=FEATHERLESS_MODEL,
             messages=[

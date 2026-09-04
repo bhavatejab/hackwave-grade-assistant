@@ -1,3 +1,5 @@
+import { CriterionResult } from '../types/api'
+
 export interface RubricPoint {
   point: string
   matched: boolean
@@ -27,6 +29,8 @@ export interface QuestionEvaluation {
   teacherNotes?: string
   isOverridden?: boolean
   overrideReason?: string
+  criteria?: CriterionResult[]
+  ocrConfidence?: number | null
 }
 
 export interface EvaluationResultPayload {

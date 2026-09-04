@@ -28,10 +28,11 @@ export const OverrideMarksForm: React.FC<OverrideMarksFormProps> = ({
     question.teacherNotes || 'Reviewed & verified by evaluator.'
   )
   const [validationError, setValidationError] = useState<string>('')
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const difference = newMarks - question.originalAiMarks
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (isNaN(newMarks) || newMarks < 0) {
@@ -50,7 +51,12 @@ export const OverrideMarksForm: React.FC<OverrideMarksFormProps> = ({
     }
 
     setValidationError('')
-    onSaveOverride(question.id, newMarks, overrideReason, teacherNotes)
+    setIsSaving(true)
+    try {
+      await onSaveOverride(question.id, newMarks, overrideReason, teacherNotes)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -169,6 +175,7 @@ export const OverrideMarksForm: React.FC<OverrideMarksFormProps> = ({
           type="submit"
           variant="primary"
           size="sm"
+          isLoading={isSaving}
           leftIcon={<CheckCircle2 className="w-4 h-4" />}
         >
           Save Override

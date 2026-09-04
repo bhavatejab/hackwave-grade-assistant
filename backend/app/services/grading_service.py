@@ -153,6 +153,8 @@ Remember:
             if confidence < 0.70:
                 result["requires_teacher_review"] = True
 
+            result["ocr_confidence"] = request.ocr_confidence
+
             return result
 
         except (json.JSONDecodeError, TypeError, ValueError):
@@ -169,5 +171,6 @@ Remember:
                 "criteria": [],
                 "alternative_reasoning_detected": False,
                 "confidence": 0,
-                "requires_teacher_review": True
+                "requires_teacher_review": True,
+                "ocr_confidence": request.ocr_confidence
             }

@@ -1,4 +1,5 @@
-import { ApiResponse } from '../types/api'
+import { ApiResponse, GradeRequest, GradeResponse, ChallengeRequest, ChallengeResponse, FeedbackRequest, FeedbackResponse, FinalGradeRequest, FinalGradeResponse, HealthResponse } from '../types/api'
+import { apiClient } from './apiClient'
 
 export interface CreateEvaluationPayload {
   assessmentName: string
@@ -165,5 +166,39 @@ export const evaluationService = {
         { id: '8', name: 'Hannah Abbott', rollNumber: 'CS2026-008', uuid: 'STU-H22D55', status: 'Requires Review', course: 'CS182' },
       ],
     }
+  },
+
+  // ----------------------------------------------------
+  // FastAPI Backend Endpoints
+  // ----------------------------------------------------
+
+  // GET /health
+  checkHealth: async (): Promise<HealthResponse> => {
+    const response = await apiClient.get<HealthResponse>('/health')
+    return response.data
+  },
+
+  // POST /api/grade
+  gradeAnswer: async (payload: GradeRequest): Promise<GradeResponse> => {
+    const response = await apiClient.post<GradeResponse>('/api/grade', payload)
+    return response.data
+  },
+
+  // POST /api/challenge
+  challengeCriterion: async (payload: ChallengeRequest): Promise<ChallengeResponse> => {
+    const response = await apiClient.post<ChallengeResponse>('/api/challenge', payload)
+    return response.data
+  },
+
+  // POST /api/feedback
+  submitFeedback: async (payload: FeedbackRequest): Promise<FeedbackResponse> => {
+    const response = await apiClient.post<FeedbackResponse>('/api/feedback', payload)
+    return response.data
+  },
+
+  // POST /api/final-grade
+  submitFinalGrade: async (payload: FinalGradeRequest): Promise<FinalGradeResponse> => {
+    const response = await apiClient.post<FinalGradeResponse>('/api/final-grade', payload)
+    return response.data
   },
 }

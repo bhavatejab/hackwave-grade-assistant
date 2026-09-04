@@ -12,6 +12,7 @@ class GradeRequest(BaseModel):
     question: str
     rubric: List[RubricCriterion]
     student_answer: str
+    ocr_confidence: float | None = None
 
 
 class CriterionResult(BaseModel):
@@ -29,6 +30,7 @@ class GradeResponse(BaseModel):
     alternative_reasoning_detected: bool
     confidence: float = Field(ge=0, le=1)
     requires_teacher_review: bool
+    ocr_confidence: float | None = None
 
 
 # -----------------------------
