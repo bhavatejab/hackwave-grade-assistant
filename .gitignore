@@ -1,25 +1,22 @@
-# Python virtual environments
-venv/
-**/venv/
+# Python virtual environment
+.venv/
+
+# Environment variables and API keys
+.env
 
 # Python cache
 __pycache__/
-**/__pycache__/
 *.py[cod]
 
-# Environment variables
-.env
-**/.env
+# Testing
+.pytest_cache/
 
-# Node
-node_modules/
-**/node_modules/
-dist/
-**/dist/
+# Uploaded student files
+uploads/
 
-# VS Code
-.vscode/
+# Temporary OCR files
+tmp/
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
